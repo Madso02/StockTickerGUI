@@ -1,8 +1,9 @@
 import type { PageServerLoad } from './$types';
+import { api } from '$lib/server/apiConfigs';
 
 
 export const load: PageServerLoad = async ({ params }) => {
-    let apiData = await fetch('http://localhost:5251/api/Overviews').then(
+    let apiData = await fetch(api.url + 'Overviews').then(
         (response) => {
             if(!response.ok) {
                 console.error("error")

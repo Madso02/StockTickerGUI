@@ -1,8 +1,9 @@
 import type { LayoutServerLoad } from './$types';
+import { api } from '$lib/server/apiConfigs';
 
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
-    let apiData = await fetch('http://localhost:5251/api/Overviews').then(
+    let apiData = await fetch(api.url + 'Overviews').then(
         (response) => {
             if(!response.ok) {
                 console.error("error")
