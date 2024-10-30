@@ -1,11 +1,30 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { AppRail, AppRailTile, AppRailAnchor } from '@skeletonlabs/skeleton';
-	import type { LayoutData, PageData } from './$types';
+	import type { LayoutData } from './$types';
 	import { page } from '$app/stores';
+	import { initializeStores, Modal, getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+	import CreateOverviewModal from '$lib/createOverviewModal.svelte';
+	import type { Snippet } from 'svelte';
 
-	let { data }: { data: LayoutData } = $props();
+	initializeStores();
+
+	const modalStore = getModalStore();
+
+	const modalRegistry: Record<string, ModalComponent> = {
+		createOverviewModal: { ref: CreateOverviewModal }
+	};
+
+	const createOverviewModal: ModalSettings = {
+		type: 'component',
+		component: 'createOverviewModal'
+	};
+
+	let { data, children }: { data: LayoutData, children: Snippet } = $props();
 </script>
+
+<Modal components={modalRegistry} />
 
 <div class="grid grid-cols-1 md:grid-cols-[auto_1fr]">
 	<aside class="static h-screen">
@@ -54,7 +73,13 @@
 					<span>{overview.name}</span>
 				</AppRailAnchor>
 			{/each}
-			<AppRailAnchor href="/overview" selected={$page.url.pathname === '/overview'}>
+			<AppRailAnchor
+				href="javascript:void(0)"
+				on:click={() => {
+					modalStore.trigger(createOverviewModal);
+				}}
+				selected={$page.url.pathname === '/overview'}
+			>
 				<svelte:fragment slot="lead">
 					<div class="flex justify-center">
 						<svg
@@ -93,6 +118,6 @@
 		</AppRail>
 	</aside>
 	<main class="p-4">
-		<slot />
+		{@render children()}
 	</main>
 </div>

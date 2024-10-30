@@ -1,7 +1,16 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
 	let { data }: { data: PageData } = $props();
+
+	const modalStore = getModalStore();
+
+	const createOverviewModal: ModalSettings = {
+		type: 'component',
+		component: 'createOverviewModal'
+	}
 </script>
 
 <h1 class="h1 text-center">Overviews</h1>
@@ -31,7 +40,8 @@
 		</a>
 	{/each}
 	<a
-		href="/overview"
+		href="javascript:void(0)"
+		onclick={() => {modalStore.trigger(createOverviewModal)}}
 		class="block card w-80 p-4 border-2 border-secondary-500 flex justify-center items-center flex-col"
 	>
 		<svg
